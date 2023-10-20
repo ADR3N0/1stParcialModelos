@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Perfil del usuario</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {background: linear-gradient(to right, #0f2027, #203a43, #2c5364); font-family: Arial, sans-serif;}
+        h2 {text-align: center; color: white; margin-bottom: 20px;}
+        #banner {width: 100%; height: 90px; background-color: white; margin: 20px 0; display: flex; align-items: center;
+        justify-content: center;}
+        #banner img {width: 300px;}
+        #userProfile {width: 400px; margin: 20px auto; padding: 20px; border-radius: 10px; background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);}
+        #userProfile img {display: block; width: 200px; height: 200px; margin: 0 auto; border-radius: 50%; object-fit: cover;}
+        #userProfile p {color: white; margin-bottom: 10px;}
+    </style>
+</head>
+<body>
+    <div id="banner">
+        <img src="banner.jpg">
+    </div>
+
+    <h2>Perfil del usuario</h2>
+
+    <div id="userProfile">
+        
+    </div>
+
+    <script>
+    $(document).ready(function(){
+        var token = localStorage.getItem('token');
+
+        $.ajax({
+            url: '/users/me/',
+            type: 'get',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            success: function(data){
+                var isActive = data.disabled ? 'No' : 'Sí';
+                $('#userProfile').html(`
+                    <img src="${data.profile_image}" alt="Imagen de perfil">
+                    <p>Nombre de usuario: ${data.username}</p>
+                    <p>Nombre completo: ${data.full_name}</p>
+                    <p>Email: ${data.email}</p>
+                    <p>Phone: ${data.phone}</p>
+                    <p>Matricula: ${data.matricula}</p>
+                    <p>Activo: ${isActive}</p>
+                `);
+            },
+            error: function(){
+                alert('Error al cargar el perfil del usuario');
+            }
+        });
+    });
+    </script>
+
+</body>
+</html>
